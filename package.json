@@ -1,7 +1,7 @@
 {
-  "name": "cabloans",
+  "name": "airtel-loans",
   "version": "1.0.0",
-  "description": "ECOCASH Loans - Online Loan Application Portal",
+  "description": "Airtel Loans - Online Loan Application Portal",
   "private": true,
   "type": "module",
   "scripts": {
