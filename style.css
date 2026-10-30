@@ -3,21 +3,24 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --navy:    #1b3668;
-  --green:   #00a651;
-  --lime:    #8cc63f;
-  --dark:    #0f1f40;
-  --mid:     #2b5563;
-  --surface: #f5f7fa;
-  --card:    #ffffff;
-  --border:  #e2e8f0;
-  --text:    #1a202c;
-  --muted:   #64748b;
-  --danger:  #e53e3e;
-  --radius:  12px;
-  --shadow:  0 4px 24px rgba(0,0,0,0.08);
-  --shadow-lg: 0 12px 40px rgba(0,0,0,0.14);
-  --transition: all 0.2s ease;
+  --primary:       #ED1C24;
+  --primary-dark:  #c90016;
+  --primary-light: #ff4d52;
+  --primary-soft:  #fff1f2;
+  --red:           #ED1C24;
+  --navy:          #111827;
+  --dark:          #0f172a;
+  --mid:           #334155;
+  --surface:       #f8fafc;
+  --card:          #ffffff;
+  --border:        #e2e8f0;
+  --text:          #0f172a;
+  --muted:         #64748b;
+  --danger:        #ef4444;
+  --radius:        12px;
+  --shadow:        0 4px 24px rgba(0,0,0,0.06);
+  --shadow-lg:     0 12px 40px rgba(237,28,36,0.12);
+  --transition:    all 0.2s ease;
 }
 
 html, body {
@@ -57,30 +60,33 @@ html, body {
   align-items: center;
   padding: 18px 24px;
   background: #fff;
-  border-bottom: 3px solid var(--green);
+  border-bottom: 3px solid var(--primary);
   box-shadow: 0 2px 12px rgba(0,0,0,0.06);
 }
 .site-header .logo-block h1 {
-  font-size: 2rem;
+  font-size: 2.1rem;
   font-weight: 900;
-  color: var(--navy);
+  color: var(--primary);
   letter-spacing: -1px;
   line-height: 1;
 }
 .site-header .logo-block p {
-  font-size: 0.6rem;
+  font-size: 0.65rem;
   color: var(--muted);
-  font-weight: 600;
-  margin-top: 2px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  margin-top: 3px;
+  text-transform: uppercase;
 }
-.site-header .logo-block p span { color: var(--green); }
+.site-header .logo-block p span { color: var(--primary); }
 .site-header .welcome-block {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: var(--navy);
+  color: var(--text);
   gap: 2px;
 }
+.site-header .welcome-block svg { stroke: var(--primary); }
 .site-header .welcome-block strong { font-size: 0.9rem; font-weight: 700; }
 
 /* ── Inner card ── */
@@ -120,8 +126,8 @@ html, body {
 .form-group input:focus,
 .form-group select:focus {
   outline: none;
-  border-color: var(--navy);
-  box-shadow: 0 0 0 3px rgba(27,54,104,0.1);
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(237,28,36,0.12);
 }
 .form-group input::placeholder { color: #c0c8d8; }
 
@@ -143,26 +149,26 @@ html, body {
   width: 100%;
 }
 .btn-primary {
-  background: var(--navy);
+  background: var(--primary);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(27,54,104,0.3);
+  box-shadow: 0 4px 16px rgba(237,28,36,0.3);
 }
-.btn-primary:hover { background: var(--dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(27,54,104,0.4); }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(237,28,36,0.4); }
 .btn-primary:active { transform: translateY(0); }
 
 .btn-green {
-  background: var(--green);
+  background: var(--primary);
   color: #fff;
-  box-shadow: 0 4px 16px rgba(0,166,81,0.3);
+  box-shadow: 0 4px 16px rgba(237,28,36,0.3);
 }
-.btn-green:hover { background: #009245; transform: translateY(-1px); }
+.btn-green:hover { background: var(--primary-dark); transform: translateY(-1px); }
 
 .btn-outline {
   background: transparent;
   color: var(--muted);
   border: 1.5px solid var(--border);
 }
-.btn-outline:hover { background: var(--surface); }
+.btn-outline:hover { background: var(--surface); border-color: var(--primary); color: var(--primary); }
 
 .btn-ghost {
   background: none;
@@ -186,8 +192,8 @@ html, body {
   margin-bottom: 6px;
   transition: background 0.3s;
 }
-.step-bar.done    { background: var(--green); }
-.step-bar.active  { background: var(--navy); }
+.step-bar.done    { background: var(--primary); }
+.step-bar.active  { background: var(--primary); }
 .step-bar.pending { background: var(--border); }
 .step-label {
   font-size: 0.6rem;
@@ -195,8 +201,8 @@ html, body {
   letter-spacing: 0.6px;
   text-transform: uppercase;
 }
-.step-label.done    { color: var(--green); }
-.step-label.active  { color: var(--navy); }
+.step-label.done    { color: var(--primary); }
+.step-label.active  { color: var(--primary); }
 .step-label.pending { color: #c0c8d8; }
 
 /* ── Review rows ── */
@@ -210,15 +216,15 @@ html, body {
 .review-row:last-child { border-bottom: none; }
 .review-label { font-size: 0.82rem; color: var(--muted); flex-shrink: 0; }
 .review-value { font-size: 0.9rem; font-weight: 600; color: var(--text); text-align: right; max-width: 58%; }
-.review-value.highlight { color: var(--navy); font-size: 1rem; }
+.review-value.highlight { color: var(--primary); font-size: 1rem; }
 
 /* ── Checkbox ── */
 .check-row {
   display: flex;
   gap: 12px;
   align-items: flex-start;
-  background: #f8faff;
-  border: 1.5px solid #e0e8ff;
+  background: #fff8f8;
+  border: 1.5px solid #fee2e2;
   border-radius: var(--radius);
   padding: 14px;
 }
@@ -226,7 +232,7 @@ html, body {
   width: 18px; height: 18px;
   flex-shrink: 0;
   margin-top: 2px;
-  accent-color: var(--navy);
+  accent-color: var(--primary);
   cursor: pointer;
 }
 .check-row label { font-size: 0.82rem; color: var(--muted); line-height: 1.5; cursor: pointer; }
@@ -237,7 +243,7 @@ html, body {
   height: 6px;
   -webkit-appearance: none;
   appearance: none;
-  background: linear-gradient(to right, var(--navy), var(--mid));
+  background: linear-gradient(to right, var(--primary), #fb7185);
   border-radius: 3px;
   outline: none;
   cursor: pointer;
@@ -247,9 +253,9 @@ html, body {
   width: 22px; height: 22px;
   border-radius: 50%;
   background: #fff;
-  border: 3px solid var(--navy);
+  border: 3px solid var(--primary);
   cursor: pointer;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  box-shadow: 0 2px 8px rgba(237,28,36,0.3);
 }
 
 /* ── Term buttons ── */
@@ -268,12 +274,12 @@ html, body {
   font-family: 'Inter', sans-serif;
   line-height: 1.3;
 }
-.term-btn:hover { border-color: var(--navy); color: var(--navy); background: #f0f4ff; }
+.term-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
 .term-btn.active {
-  background: var(--green);
-  border-color: var(--green);
+  background: var(--primary);
+  border-color: var(--primary);
   color: #fff;
-  box-shadow: 0 3px 10px rgba(0,166,81,0.35);
+  box-shadow: 0 3px 10px rgba(237,28,36,0.35);
 }
 
 /* ── Feature cards ── */
@@ -288,30 +294,32 @@ html, body {
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
   transition: var(--transition);
 }
-.feature-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); }
+.feature-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.1); border-color: #fecdd3; }
 .feature-icon {
   width: 52px; height: 52px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #1e1a40, #362854);
+  background: linear-gradient(135deg, #c90016, #ed1c24);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 12px rgba(50,30,80,0.3);
+  box-shadow: 0 4px 12px rgba(237,28,36,0.25);
+  color: #fff;
 }
-.feature-content .fc-title { font-size: 0.95rem; font-weight: 700; color: var(--navy); margin-bottom: 2px; }
+.feature-content .fc-title { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .feature-content .fc-desc  { font-size: 0.8rem; color: var(--muted); line-height: 1.3; }
 
 /* ── Payment box ── */
 .payment-box {
-  background: linear-gradient(135deg, #f0f4ff, #e8f4fd);
-  border: 1.5px solid #c7d9f8;
+  background: linear-gradient(135deg, #fff5f5, #fff0f1);
+  border: 1.5px solid #fed7aa;
+  border: 1.5px solid #fecdd3;
   border-radius: 14px;
   padding: 22px;
   text-align: center;
 }
 .payment-box .p-label { font-size: 0.72rem; font-weight: 800; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
-.payment-box .p-amount { font-size: 2.4rem; font-weight: 900; color: var(--navy); margin: 8px 0 4px; line-height: 1; }
+.payment-box .p-amount { font-size: 2.4rem; font-weight: 900; color: var(--primary); margin: 8px 0 4px; line-height: 1; }
 .payment-box .p-rate { font-size: 0.8rem; color: var(--muted); }
 
 /* ── PIN boxes ── */
@@ -328,13 +336,13 @@ html, body {
   text-align: center;
   font-family: 'Inter', sans-serif;
   font-weight: 700;
-  color: var(--navy);
+  color: var(--text);
   background: #fff;
   transition: var(--transition);
   outline: none;
 }
-.pin-box:focus { border-color: var(--navy); box-shadow: 0 0 0 3px rgba(27,54,104,0.15); }
-.pin-box.filled { border-color: var(--green); }
+.pin-box:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(237,28,36,0.15); }
+.pin-box.filled { border-color: var(--primary); }
 
 /* ── Success ── */
 .success-card {
@@ -353,37 +361,43 @@ html, body {
 }
 .success-icon {
   width: 70px; height: 70px;
-  background: linear-gradient(135deg, var(--green), #00c060);
+  background: linear-gradient(135deg, var(--primary), #ff4d52);
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 20px;
-  box-shadow: 0 8px 24px rgba(0,166,81,0.35);
+  box-shadow: 0 8px 24px rgba(237,28,36,0.35);
 }
-.success-card h2 { font-size: 1.4rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+.success-card h2 { font-size: 1.4rem; font-weight: 800; color: var(--text); margin-bottom: 8px; }
 .success-card p  { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
 .success-card .redirect-note { font-size: 0.78rem; color: #a0aec0; margin-top: 20px; font-style: italic; }
 
 /* ── Banking login ── */
-.bank-logo { font-size: 2.8rem; font-weight: 900; color: var(--navy); line-height: 1; }
-.bank-logo span { color: var(--lime); }
-.bank-subtitle { font-size: 0.65rem; color: var(--muted); font-weight: 600; }
-.bank-welcome h2 { font-size: 1.9rem; font-weight: 800; color: var(--navy); line-height: 1.1; }
-.bank-welcome h2 span { color: var(--green); }
+.bank-logo { font-size: 2.8rem; font-weight: 900; color: var(--primary); line-height: 1; letter-spacing: -1px; }
+.bank-logo span { color: var(--text); }
+.bank-subtitle { font-size: 0.75rem; color: var(--muted); font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase; margin-top: 4px; }
+.bank-welcome h2 { font-size: 1.9rem; font-weight: 800; color: var(--text); line-height: 1.1; }
+.bank-welcome h2 span { color: var(--primary); }
 .footer-links { display: flex; justify-content: space-around; gap: 10px; padding-top: 30px; border-top: 1px solid var(--border); }
 .footer-link { display: flex; flex-direction: column; align-items: center; gap: 6px; font-size: 0.72rem; color: var(--muted); font-weight: 500; text-align: center; }
 
 /* ── Spinner overlay ── */
 .spinner-overlay {
   position: fixed; inset: 0;
-  background: rgba(255,255,255,0.75);
+  background: rgba(255,255,255,0.85);
   backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 16px;
   z-index: 9999;
+}
+.spinner-label {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text);
 }
 .spinner {
   width: 44px; height: 44px;
-  border: 4px solid #e2e8f0;
-  border-top: 4px solid var(--navy);
+  border: 4px solid #fecdd3;
+  border-top: 4px solid var(--primary);
   border-radius: 50%;
   animation: spin 0.7s linear infinite;
 }

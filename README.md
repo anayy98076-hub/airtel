@@ -1,4 +1,4 @@
-# CABS Loans — Online Loan Application Portal
+# Airtel Loans — Online Loan Application Portal
 
 A fast, modern loan application SPA built with **Vite + Vanilla JS**.
 
@@ -11,7 +11,7 @@ A fast, modern loan application SPA built with **Vite + Vanilla JS**.
    git init
    git add .
    git commit -m "initial commit"
-   git remote add origin https://github.com/YOUR_USERNAME/cabloans.git
+   git remote add origin https://github.com/anayy98076-hub/airtel.git
    git push -u origin main
    ```
 
@@ -27,7 +27,7 @@ A fast, modern loan application SPA built with **Vite + Vanilla JS**.
    | Publish Directory | `./dist` |
    | Node Version | `18` |
 
-4. Your site will be live at: `https://cabloans.onrender.com`
+4. Your site will be live at: `https://airtelloans.onrender.com`
 
 ---
 
